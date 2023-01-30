@@ -1,0 +1,26 @@
+
+
+-I 400030 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload search --deployStep 0
+-I 400031 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload search --deployStep 25
+-I 400032 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload search --deployStep 50
+-I 400033 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload search --deployStep 75
+-I 400034 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload search --deployStep 100
+
+-I 400130 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload cachefollower --deployStep 0
+-I 400131 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload cachefollower --deployStep 25
+-I 400132 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload cachefollower --deployStep 50
+-I 400133 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload cachefollower --deployStep 75
+-I 400134 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload cachefollower --deployStep 100
+
+-I 400230 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload mining --deployStep 0
+-I 400231 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload mining --deployStep 25
+-I 400232 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload mining --deployStep 50
+-I 400233 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload mining --deployStep 75
+-I 400234 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload mining --deployStep 100
+
+-I 400330 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload facebook --deployStep 0
+-I 400331 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload facebook --deployStep 25
+-I 400332 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload facebook --deployStep 50
+-I 400333 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload facebook --deployStep 75
+-I 400334 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --tcpInitWindow 10 --workload facebook --deployStep 100
+

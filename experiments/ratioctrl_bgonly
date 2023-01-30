@@ -1,0 +1,99 @@
+
+
+-I 410000 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 0 --strictHighPriority 0 --workload search --deployStep 0
+-I 410001 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 0 --strictHighPriority 0 --workload search --deployStep 25
+-I 410002 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 0 --strictHighPriority 0 --workload search --deployStep 50
+-I 410003 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 0 --strictHighPriority 0 --workload search --deployStep 75
+-I 410004 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 0 --strictHighPriority 0 --workload search --deployStep 100
+
+-I 410010 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 1 --oracleQueueWeight 1 --strictHighPriority 0 --workload search --deployStep 0
+-I 410011 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 1 --oracleQueueWeight 1 --strictHighPriority 0 --workload search --deployStep 25
+-I 410012 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 1 --oracleQueueWeight 1 --strictHighPriority 0 --workload search --deployStep 50
+-I 410013 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 1 --oracleQueueWeight 1 --strictHighPriority 0 --workload search --deployStep 75
+-I 410014 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c xpass --xpassQueueIsolation 1 --oracleQueueWeight 1 --strictHighPriority 0 --workload search --deployStep 100
+
+-I 410020 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.4 --egdxScheme 2 --workload search --deployStep 0
+-I 410021 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.4 --egdxScheme 2 --workload search --deployStep 25
+-I 410022 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.4 --egdxScheme 2 --workload search --deployStep 50
+-I 410023 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.4 --egdxScheme 2 --workload search --deployStep 75
+-I 410024 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.4 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410120 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.42 --egdxScheme 2 --workload search --deployStep 0
+-I 410121 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.42 --egdxScheme 2 --workload search --deployStep 25
+-I 410122 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.42 --egdxScheme 2 --workload search --deployStep 50
+-I 410123 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.42 --egdxScheme 2 --workload search --deployStep 75
+-I 410124 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.42 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410220 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.44 --egdxScheme 2 --workload search --deployStep 0
+-I 410221 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.44 --egdxScheme 2 --workload search --deployStep 25
+-I 410222 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.44 --egdxScheme 2 --workload search --deployStep 50
+-I 410223 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.44 --egdxScheme 2 --workload search --deployStep 75
+-I 410224 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.44 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410320 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.45 --egdxScheme 2 --workload search --deployStep 0
+-I 410321 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.45 --egdxScheme 2 --workload search --deployStep 25
+-I 410322 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.45 --egdxScheme 2 --workload search --deployStep 50
+-I 410323 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.45 --egdxScheme 2 --workload search --deployStep 75
+-I 410324 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.45 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410420 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.46 --egdxScheme 2 --workload search --deployStep 0
+-I 410421 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.46 --egdxScheme 2 --workload search --deployStep 25
+-I 410422 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.46 --egdxScheme 2 --workload search --deployStep 50
+-I 410423 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.46 --egdxScheme 2 --workload search --deployStep 75
+-I 410424 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.46 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410520 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.48 --egdxScheme 2 --workload search --deployStep 0
+-I 410521 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.48 --egdxScheme 2 --workload search --deployStep 25
+-I 410522 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.48 --egdxScheme 2 --workload search --deployStep 50
+-I 410523 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.48 --egdxScheme 2 --workload search --deployStep 75
+-I 410524 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.48 --egdxScheme 2 --workload search --deployStep 100
+
+-I 410620 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.5 --egdxScheme 2 --workload search --deployStep 0
+-I 410621 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.5 --egdxScheme 2 --workload search --deployStep 25
+-I 410622 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.5 --egdxScheme 2 --workload search --deployStep 50
+-I 410623 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.5 --egdxScheme 2 --workload search --deployStep 75
+-I 410624 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.5 --egdxScheme 2 --workload search --deployStep 100
+
+
+-I 410030 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --workload search --deployStep 0
+-I 410031 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --workload search --deployStep 25
+-I 410032 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --workload search --deployStep 50
+-I 410033 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --workload search --deployStep 75
+-I 410034 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c gdx --workload search --deployStep 100
+
+
+-I 411020 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.3 --egdxScheme 2 --workload search --deployStep 0
+-I 411021 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.3 --egdxScheme 2 --workload search --deployStep 25
+-I 411022 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.3 --egdxScheme 2 --workload search --deployStep 50
+-I 411023 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.3 --egdxScheme 2 --workload search --deployStep 75
+-I 411024 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.3 --egdxScheme 2 --workload search --deployStep 100
+
+-I 411120 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.32 --egdxScheme 2 --workload search --deployStep 0
+-I 411121 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.32 --egdxScheme 2 --workload search --deployStep 25
+-I 411122 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.32 --egdxScheme 2 --workload search --deployStep 50
+-I 411123 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.32 --egdxScheme 2 --workload search --deployStep 75
+-I 411124 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.32 --egdxScheme 2 --workload search --deployStep 100
+
+-I 411220 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.34 --egdxScheme 2 --workload search --deployStep 0
+-I 411221 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.34 --egdxScheme 2 --workload search --deployStep 25
+-I 411222 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.34 --egdxScheme 2 --workload search --deployStep 50
+-I 411223 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.34 --egdxScheme 2 --workload search --deployStep 75
+-I 411224 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.34 --egdxScheme 2 --workload search --deployStep 100
+
+-I 411320 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.35 --egdxScheme 2 --workload search --deployStep 0
+-I 411321 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.35 --egdxScheme 2 --workload search --deployStep 25
+-I 411322 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.35 --egdxScheme 2 --workload search --deployStep 50
+-I 411323 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.35 --egdxScheme 2 --workload search --deployStep 75
+-I 411324 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.35 --egdxScheme 2 --workload search --deployStep 100
+
+-I 411420 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.36 --egdxScheme 2 --workload search --deployStep 0
+-I 411421 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.36 --egdxScheme 2 --workload search --deployStep 25
+-I 411422 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.36 --egdxScheme 2 --workload search --deployStep 50
+-I 411423 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.36 --egdxScheme 2 --workload search --deployStep 75
+-I 411424 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.36 --egdxScheme 2 --workload search --deployStep 100
+
+-I 411520 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.38 --egdxScheme 2 --workload search --deployStep 0
+-I 411521 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.38 --egdxScheme 2 --workload search --deployStep 25
+-I 411522 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.38 --egdxScheme 2 --workload search --deployStep 50
+-I 411523 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.38 --egdxScheme 2 --workload search --deployStep 75
+-I 411524 --linkLoad 0.5 --foregroundFlowRatio 0.00 -c negdx --xpassQueueWeight 0.38 --egdxScheme 2 --workload search --deployStep 100
