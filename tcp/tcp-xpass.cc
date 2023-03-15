@@ -388,7 +388,7 @@ Packet* TcpXPassAgent::construct_credit_request() {
 
   cmnh->size() = min_ethernet_size_;
   cmnh->ptype() = PT_XPASS_CREDIT_REQUEST;
-  cmnh->tos() = TOS_GDX_PROACTIVE;
+  cmnh->tos() = TOS_FLEXPASS_PROACTIVE;
 
   xph->credit_seq() = 0;
   xph->credit_sent_time_ = now();
@@ -417,7 +417,7 @@ Packet* TcpXPassAgent::construct_credit_stop() {
   
   cmnh->size() = min_ethernet_size_;
   cmnh->ptype() = PT_XPASS_CREDIT_STOP;
-  cmnh->tos() = TOS_GDX_PROACTIVE;
+  cmnh->tos() = TOS_FLEXPASS_PROACTIVE;
 
   xph->credit_seq() = 0;
 
@@ -447,7 +447,7 @@ Packet* TcpXPassAgent::construct_credit() {
 
   cmnh->size() = credit_size;
   cmnh->ptype() = PT_XPASS_CREDIT;
-  cmnh->tos() = TOS_GDX_CREDIT;
+  cmnh->tos() = TOS_FLEXPASS_CREDIT;
 
   xph->credit_sent_time() = now();
   xph->credit_seq() = c_seqno_;
@@ -472,7 +472,7 @@ Packet* TcpXPassAgent::construct_data(Packet *credit) {
   int datalen = cmnh->size() - tcph->hlen();
 
   cmnh->ptype() = PT_XPASS_DATA;
-  cmnh->tos() = TOS_GDX_PROACTIVE;
+  cmnh->tos() = TOS_FLEXPASS_PROACTIVE;
 
   xph->credit_sent_time() = credit_xph->credit_sent_time();
   xph->credit_seq() = credit_xph->credit_seq();
@@ -711,7 +711,7 @@ void TcpXPassAgent::sendpacket(seq_t seqno, seq_t ackno, int pflags,
     nrexmitbytes_ += datalen;
   }
   
-  ch->tos() = TOS_GDX_PROACTIVE;
+  ch->tos() = TOS_FLEXPASS_PROACTIVE;
   last_ack_sent_ = ackno;
   advance_packet(p);
   
@@ -738,7 +738,7 @@ void TcpXPassAgent::advance_packet(Packet *p) {
     }
   }
   
-  cmnh->tos() = TOS_GDX_PROACTIVE;
+  cmnh->tos() = TOS_FLEXPASS_PROACTIVE;
 
   sendbuffer_->enque(p);
 

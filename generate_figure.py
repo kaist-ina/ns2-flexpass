@@ -122,7 +122,7 @@ def get_datapoint(filename: str, metric: str) -> float:
                 fcts_small_flow.append(fct)
                 if 'tcp' in line:
                     fcts_small_flow_legacy.append(fct)
-                elif 'gdx' in line or 'xpass' in line:
+                elif 'gdx' in line or 'flexpass' in line or 'xpass' in line:
                     fcts_small_flow_new.append(fct)
             fcts_overall.append(fct)
 

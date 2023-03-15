@@ -1,5 +1,5 @@
-#ifndef _XPASS_EGDX_H_
-#define _XPASS_EGDX_H_
+#ifndef _XPASS_FLEXPASS_H_
+#define _XPASS_FLEXPASS_H_
 
 #include "agent.h"
 #include "packet.h"
@@ -23,22 +23,22 @@
 
 #define AEOLUS 0
 
-typedef enum EGDX_SEND_STATE_ {
-  EGDX_SEND_CLOSED,
-  EGDX_SEND_CLOSE_WAIT,
-  EGDX_SEND_CREDIT_SENDING,
-  EGDX_SEND_CREDIT_STOP_RECEIVED,
-  EGDX_SEND_NSTATE,
-} EGDX_SEND_STATE;
+typedef enum FLEXPASS_SEND_STATE_ {
+  FLEXPASS_SEND_CLOSED,
+  FLEXPASS_SEND_CLOSE_WAIT,
+  FLEXPASS_SEND_CREDIT_SENDING,
+  FLEXPASS_SEND_CREDIT_STOP_RECEIVED,
+  FLEXPASS_SEND_NSTATE,
+} FLEXPASS_SEND_STATE;
 
-typedef enum EGDX_RECV_STATE_ {
-  EGDX_RECV_CLOSED,
-  EGDX_RECV_CLOSE_WAIT,
-  EGDX_RECV_CREDIT_REQUEST_SENT,
-  EGDX_RECV_CREDIT_RECEIVING,
-  EGDX_RECV_CREDIT_STOP_SENT,
-  EGDX_RECV_NSTATE,
-} EGDX_RECV_STATE;
+typedef enum FLEXPASS_RECV_STATE_ {
+  FLEXPASS_RECV_CLOSED,
+  FLEXPASS_RECV_CLOSE_WAIT,
+  FLEXPASS_RECV_CREDIT_REQUEST_SENT,
+  FLEXPASS_RECV_CREDIT_RECEIVING,
+  FLEXPASS_RECV_CREDIT_STOP_SENT,
+  FLEXPASS_RECV_NSTATE,
+} FLEXPASS_RECV_STATE;
 
 #if AEOLUS
 typedef enum SENDER_FLOW_STATE_ {
@@ -47,7 +47,7 @@ typedef enum SENDER_FLOW_STATE_ {
 } SENDER_FLOW_STATE_;
 #endif
 
-struct hdr_egdx {
+struct hdr_flexpass {
   // To measure RTT  
   double credit_sent_time_;
 
@@ -74,8 +74,8 @@ struct hdr_egdx {
   // For header access
   static int offset_; // required by PacketHeaderManager
 	inline static int& offset() { return offset_; }
-  inline static hdr_egdx* access(const Packet* p) {
-    return (hdr_egdx*)p->access(offset_);
+  inline static hdr_flexpass* access(const Packet* p) {
+    return (hdr_flexpass*)p->access(offset_);
   }
 
   /* per-field member access functions */
@@ -100,100 +100,100 @@ struct hdr_egdx {
   }
 };
 
-class EgdxAgent;
-class EgdxSendCreditTimer: public TimerHandler {
+class FlexPassAgent;
+class FlexPassSendCreditTimer: public TimerHandler {
 public:
-  EgdxSendCreditTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassSendCreditTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxCreditStopTimer: public TimerHandler {
+class FlexPassCreditStopTimer: public TimerHandler {
 public:
-  EgdxCreditStopTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassCreditStopTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxSenderRetransmitTimer: public TimerHandler {
+class FlexPassSenderRetransmitTimer: public TimerHandler {
 public:
-  EgdxSenderRetransmitTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassSenderRetransmitTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
 
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxReceiverRetransmitTimer: public TimerHandler {
+class FlexPassReceiverRetransmitTimer: public TimerHandler {
 public:
-  EgdxReceiverRetransmitTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassReceiverRetransmitTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxFCTTimer: public TimerHandler {
+class FlexPassFCTTimer: public TimerHandler {
 public:
-  EgdxFCTTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassFCTTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxAllocateTxTimer: public TimerHandler {
+class FlexPassAllocateTxTimer: public TimerHandler {
 public:
-  EgdxAllocateTxTimer(EgdxAgent *a, bool xpass): TimerHandler(), a_(a), xpass_(xpass) { }
+  FlexPassAllocateTxTimer(FlexPassAgent *a, bool xpass): TimerHandler(), a_(a), xpass_(xpass) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
   bool xpass_;
 };
 
 #if AEOLUS
-class EgdxFirstRttSendTimer: public TimerHandler {
+class FlexPassFirstRttSendTimer: public TimerHandler {
 public:
-  EgdxFirstRttSendTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassFirstRttSendTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxRetransmitTimer: public TimerHandler {
+class FlexPassRetransmitTimer: public TimerHandler {
 public:
-  EgdxRetransmitTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassRetransmitTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
-class EgdxRestartFirstRttSendTimer: public TimerHandler {
+class FlexPassRestartFirstRttSendTimer: public TimerHandler {
 public:
-  EgdxRestartFirstRttSendTimer(EgdxAgent *a): TimerHandler(), a_(a) { }
+  FlexPassRestartFirstRttSendTimer(FlexPassAgent *a): TimerHandler(), a_(a) { }
 protected:
   virtual void expire(Event *);
-  EgdxAgent *a_;
+  FlexPassAgent *a_;
 };
 
 #endif
 
-class EgdxAgent : public SackFullTcpAgent
+class FlexPassAgent : public SackFullTcpAgent
 {
-  friend class EgdxSendCreditTimer;
-  friend class EgdxCreditStopTimer;
-  friend class EgdxSenderRetransmitTimer;
-  friend class EgdxReceiverRetransmitTimer;
-  friend class EgdxFCTTimer;
-  friend class EgdxAllocateTxTimer;
+  friend class FlexPassSendCreditTimer;
+  friend class FlexPassCreditStopTimer;
+  friend class FlexPassSenderRetransmitTimer;
+  friend class FlexPassReceiverRetransmitTimer;
+  friend class FlexPassFCTTimer;
+  friend class FlexPassAllocateTxTimer;
 #if AEOLUS
-  friend class EgdxFirstRttSendTimer;
-  friend class EgdxRetransmitTimer;
-  friend class EgdxRestartFirstRttSendTimer;
+  friend class FlexPassFirstRttSendTimer;
+  friend class FlexPassRetransmitTimer;
+  friend class FlexPassRestartFirstRttSendTimer;
 #endif
 public:
-  EgdxAgent(): SackFullTcpAgent(), credit_send_state_(EGDX_SEND_CLOSED),
-                credit_recv_state_(EGDX_RECV_CLOSED), 
+  FlexPassAgent(): SackFullTcpAgent(), credit_send_state_(FLEXPASS_SEND_CLOSED),
+                credit_recv_state_(FLEXPASS_RECV_CLOSED), 
 #if AEOLUS                
                 sender_flow_state_(SENDER_WITHIN_FIRST_RTT),
 #endif                
@@ -212,15 +212,15 @@ public:
 #if AEOLUS
                 base_rtt_(0.00004), firstrtt_send_timer_(this), last_firstrtt_burst_(0), unscheduled_burst_period_(0), aeolus_firstrtt_burst_(0),credit_request_id_(0), sender_credit_request_id_(0),
 #endif
-                egdx_beta_(0.5), egdx_beta_min_(0.5), enable_ack_(1), credit_request_sent_time_(-1), egdx_xpass_rtt_(-1), 
-                egdx_tcp_rtt_(-1), egdx_rtt_min_(-1), egdx_xpass_prioritized_bytes_(1538), egdx_xpass_prioritized_bytes_left_(0),
-                egdx_tcp_reserve_(0), egdx_allocate_tx_timer_(this, false), egdx_allocate_tx_timer_xpass_(this, true)
+                flexpass_beta_(0.5), flexpass_beta_min_(0.5), enable_ack_(1), credit_request_sent_time_(-1), flexpass_xpass_rtt_(-1), 
+                flexpass_tcp_rtt_(-1), flexpass_rtt_min_(-1), flexpass_xpass_prioritized_bytes_(1538), flexpass_xpass_prioritized_bytes_left_(0),
+                flexpass_tcp_reserve_(0), flexpass_allocate_tx_timer_(this, false), flexpass_allocate_tx_timer_xpass_(this, true)
                 {
                   sendbuffer_ = new PacketQueue;
                   // srand(1);
                 }
 
-                ~EgdxAgent() {
+                ~FlexPassAgent() {
                   delete sendbuffer_;
                 }
                 virtual int command(int argc, const char *const *argv);
@@ -234,9 +234,9 @@ public:
                 virtual void traceVar(TracedVar *v);
                 void traceAll();
                 // credit send state
-                EGDX_SEND_STATE credit_send_state_;
+                FLEXPASS_SEND_STATE credit_send_state_;
                 // credit receive state
-                EGDX_RECV_STATE credit_recv_state_;
+                FLEXPASS_RECV_STATE credit_recv_state_;
 
                 // minimum Ethernet frame size (= size of control packet such as credit)
                 int min_ethernet_size_;
@@ -302,16 +302,16 @@ public:
   double bic_beta_;
 #endif
 
-  EgdxSendCreditTimer send_credit_timer_;
-  EgdxCreditStopTimer credit_stop_timer_;
-  EgdxSenderRetransmitTimer sender_retransmit_timer_;
-  EgdxReceiverRetransmitTimer receiver_retransmit_timer_;
-  EgdxFCTTimer fct_timer_;
+  FlexPassSendCreditTimer send_credit_timer_;
+  FlexPassCreditStopTimer credit_stop_timer_;
+  FlexPassSenderRetransmitTimer sender_retransmit_timer_;
+  FlexPassReceiverRetransmitTimer receiver_retransmit_timer_;
+  FlexPassFCTTimer fct_timer_;
 
 #if AEOLUS
   /* Aeolus */
-  EgdxRetransmitTimer retransmit_timer_;
-  EgdxRestartFirstRttSendTimer restart_firstrtt_timer_;
+  FlexPassRetransmitTimer retransmit_timer_;
+  FlexPassRestartFirstRttSendTimer restart_firstrtt_timer_;
 #endif
 
   // the highest sequence number produced by app.
@@ -354,7 +354,7 @@ public:
   // maximum link rate, added for Aeolus
   // in bytes/sec
   double max_link_rate_;
-  EgdxFirstRttSendTimer firstrtt_send_timer_;
+  FlexPassFirstRttSendTimer firstrtt_send_timer_;
   // used at receiver side, to record the state of packets sent in the first rtt
   int *pkt_received_;
   // used at receiver side, total number of packets to receive
@@ -397,21 +397,21 @@ public:
 
   PacketQueue *sendbuffer_;
 
-  double egdx_beta_;
-  double egdx_beta_min_; // assumed to be weight of the queue
+  double flexpass_beta_;
+  double flexpass_beta_min_; // assumed to be weight of the queue
   int enable_ack_;
   double credit_request_sent_time_;
   double syn_sent_time_;
-  double egdx_xpass_rtt_;
-  double egdx_tcp_rtt_;
-  double egdx_rtt_min_;
+  double flexpass_xpass_rtt_;
+  double flexpass_tcp_rtt_;
+  double flexpass_rtt_min_;
   seq_t pending_bytes_;
-  seq_t egdx_xpass_prioritized_bytes_;
-  seq_t egdx_xpass_prioritized_bytes_left_;
-  seq_t egdx_tcp_reserve_;
-  EgdxAllocateTxTimer egdx_allocate_tx_timer_;
-  EgdxAllocateTxTimer egdx_allocate_tx_timer_xpass_;
-  bool egdx_tcp_start_{false};
+  seq_t flexpass_xpass_prioritized_bytes_;
+  seq_t flexpass_xpass_prioritized_bytes_left_;
+  seq_t flexpass_tcp_reserve_;
+  FlexPassAllocateTxTimer flexpass_allocate_tx_timer_;
+  FlexPassAllocateTxTimer flexpass_allocate_tx_timer_xpass_;
+  bool flexpass_tcp_start_{false};
   std::unordered_map<unsigned, double> packet_sent_timestamp_;
   std::unordered_map<unsigned, double> packet_tcp_sent_timestamp_;
   bool fct_reported_{false};
@@ -463,7 +463,6 @@ public:
       size_t required_buf = seq + datalen - stat_highest_data_;
       if (stat_max_reordering_bytes_ < required_buf) {
           stat_max_reordering_bytes_ = required_buf;
-          // printf("MAX Reordering bytes: %lu, seq+datalen=%lu, stat_heighest_data_=%lu\n", stat_max_reordering_bytes_, seq + datalen, stat_highest_data_);
       }
 
     }
@@ -477,9 +476,6 @@ public:
   seq_t datalen_remaining() const {
       seq_t len = pending_bytes_ + rc3_bytes_needs_recovery_ + (curseq_ - t_seqno_) + (SackFullTcpAgent::curseq_ - SackFullTcpAgent::highest_ack_ + 1);
       assert(len >= 0);
-      // seq_t len = pending_bytes_ + rc3_bytes_needs_recovery_ + (curseq_ - t_seqno_) + (SackFullTcpAgent::curseq_ - highest_reactive_ack_ + 1);
-      // printf("[%2.8lf: %p]pending_bytes_=%ld, rc3rec_=%ld, curseq_=%ld, t_seqno=%ld, curseq_tcp=%ld, ha=%ld, len=%ld\n", now(), this,
-      // pending_bytes_, rc3_bytes_needs_recovery_, curseq_, t_seqno_,FullTcpAgent::curseq_, FullTcpAgent::highest_ack_, len);
       return len;
   }
   inline seq_t get_reactive_buffered_bytes() {

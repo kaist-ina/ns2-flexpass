@@ -622,9 +622,9 @@ enum ns_af_enum { NS_AF_NONE, NS_AF_ILINK, NS_AF_INET };
 enum ModulationScheme {BPSK = 0, QPSK = 1, QAM16 = 2, QAM64 = 3};
 
 
-#define TOS_GDX_CREDIT 1
-#define TOS_GDX_PROACTIVE 2
-#define TOS_GDX_REACTIVE 3
+#define TOS_FLEXPASS_CREDIT 1
+#define TOS_FLEXPASS_PROACTIVE 2
+#define TOS_FLEXPASS_REACTIVE 3
 #define TOS_XPASS_DATA 4
 #define TOS_DATA_TCP 7
 

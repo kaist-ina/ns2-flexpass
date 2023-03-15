@@ -23,12 +23,12 @@ set baseCreditRate $creditRate
 set interFlowDelay 0.0000 ;# secs
 set expID [expr int([lindex $argv 1])]
 set K_port $K;	#The per-port ECN marking threshold
-set K_xpass 25;	# XPass queue ECN marking threshold (for MQ-GDX)
+set K_xpass 25;	# XPass queue ECN marking threshold
 
-set egdxSelDropThresh 200000
-set egdxScheme 2
+set flexpassSelDropThresh 200000
+set flexpassScheme 2
 set enableSharedBuffer 1
-set newEgdxAllocationLogic 1
+set newFlexPassAllocationLogic 1
 set reordering_measure_in_rc3_ 0; #only for stat purpose. must be 0 normally
 set static_allocation_ 0; #only for stat purpose. must be 0 normally
 
@@ -40,18 +40,17 @@ set sender_type "both"; #both, new, legacy
 if  {$enableSharedBuffer} {
     set dataQueueCapacity  [expr 9999*1000*1000] ; # set to infinity. RED queue itself should not drop any packets!
 }
-if {!$newEgdxAllocationLogic} {
+if {!$newFlexPassAllocationLogic} {
   puts "Caution: Using legacy allocation logic!"
 }
 
-# MQ-GDX and E-GDX
 # xpass_queue_weight: Configurable parameter of the weight of XPass queue, assuming there is no credit queue. Valid value: (0, 1)
 # This value should be applied to DWRR queues (DWRR::set-quantum) (since they don't consider credit queue when doing DWRR)
 set xpass_queue_weight 0.5
 set queue_quantum_default 1538
 set actual_xpass_queue_weight 0.5 ;# will be calculated later
 
-set ccc_type [lindex $argv 0]; # xpass, gdx, mqgdx, egdx, negdx
+set ccc_type [lindex $argv 0]; # xpass, gdx, flexpass
 
 if {([string compare $ccc_type "xpass"] == 0)} {
     # set enable_dwrr_q 0;
@@ -62,36 +61,23 @@ if {([string compare $ccc_type "xpass"] == 0)} {
     set enable_dwrr_q 1;
     set enable_tos_ 0;
     set enable_non_xpass_selective_dropping_ 0;
-} elseif {([string compare $ccc_type "mqgdx"] == 0) || ([string compare $ccc_type "egdx"] == 0)} {
-    set enable_dwrr_q 1;
-    set enable_tos_ 1;
-    set enable_non_xpass_selective_dropping_ 0;
-} elseif {([string compare $ccc_type "negdx"] == 0)} {
+} elseif {([string compare $ccc_type "flexpass"] == 0)} {
     set enable_dwrr_q 1;
     set enable_tos_ 1;
     set enable_non_xpass_selective_dropping_ 1;
 } else {
-    puts "Invalid Credit-based CC type: must be one of xpass, gdx, mqgdx, egdx, negdx"
+    puts "Invalid Credit-based CC type: must be one of xpass, gdx, flexpass"
     exit 1
 }
 
-if {[string compare $ccc_type "egdx"] == 0} {
-    # xpass_queue_weight_ratio: ratio of XPass queue weight compared to TCP queue weight
-    set xpass_queue_weight_ratio [expr $xpass_queue_weight / (1 - $xpass_queue_weight)] 
-    # actual_xpass_queue_weight: actual weight of XPass queue, considering credit queue
-    # This value should be applied to credit generators (Agents::egdx_beta_) and credit rate limiters (DWRR::token_refresh_rate_)
-    set actual_xpass_queue_weight [expr 1538 / (1538 + (84+1538) * $xpass_queue_weight_ratio)];
-    
-    puts "xpass_queue_weight = ${xpass_queue_weight}"
-    puts "actual_xpass_queue_weight = ${actual_xpass_queue_weight}"
-} elseif {([string compare $ccc_type "negdx"] == 0)} {
+if {([string compare $ccc_type "flexpass"] == 0)} {
     # set xpass_queue_weight_ratio 0;
     # set actual_xpass_queue_weight 0.5;
     
     # xpass_queue_weight_ratio: ratio of XPass queue weight compared to TCP queue weight
     # set xpass_queue_weight_ratio [expr $xpass_queue_weight / (1 - $xpass_queue_weight)] 
     # actual_xpass_queue_weight: actual weight of XPass queue, considering credit queue
-    # This value should be applied to credit generators (Agents::egdx_beta_) and credit rate limiters (DWRR::token_refresh_rate_)
+    # This value should be applied to credit generators (Agents::flexpass_beta_) and credit rate limiters (DWRR::token_refresh_rate_)
     set actual_xpass_queue_weight [expr (1538.0-84.0)/ 1538 * $xpass_queue_weight];
     
     puts "xpass_queue_weight = ${xpass_queue_weight}"
@@ -132,7 +118,7 @@ proc finish {} {
 }
 $ns trace-all $nt
 
-Queue/BroadcomNode set selective_dropping_threshold_ $egdxSelDropThresh
+Queue/BroadcomNode set selective_dropping_threshold_ $flexpassSelDropThresh
 
 puts "Creating Nodes..."
 set left_gateway [$ns node]
@@ -180,7 +166,7 @@ if {$enable_dwrr_q} {
     Queue/DwrrXPassRED set limit_ [expr $dataQueueCapacity / 1538];
 
     
-    if {([string compare $ccc_type "egdx"] == 0) || ([string compare $ccc_type "negdx"] == 0)} {
+    if {[string compare $ccc_type "flexpass"] == 0} {
         Queue/DwrrXPassRED set token_refresh_rate_ [expr $creditRate * $actual_xpass_queue_weight]
     } else {
         Queue/DwrrXPassRED set token_refresh_rate_ [expr $creditRate]
@@ -198,8 +184,8 @@ if {$enable_dwrr_q} {
     Queue/DwrrXPassRED set enable_non_xpass_selective_dropping_ $enable_non_xpass_selective_dropping_
     
     Queue/DwrrXPassRED set enable_shared_buffer_ $enableSharedBuffer
-    Queue/DwrrXPassRED set selective_dropping_threshold_ $egdxSelDropThresh
-    Queue/DwrrXPassRED set egdx_queue_scheme_ $egdxScheme
+    Queue/DwrrXPassRED set selective_dropping_threshold_ $flexpassSelDropThresh
+    Queue/DwrrXPassRED set flexpass_queue_scheme_ $flexpassScheme
 
 } else {
     Queue/XPassRED set queue_num_ 3
@@ -370,64 +356,59 @@ Agent/TCP/FullTcp set nodelay_ true
 Agent/TCP/FullTcp set state_ 0
 Agent/TCP/FullTcp set exp_id_ $expID
 
-# if {[string compare $ccc_type "xpass"] == 0} {
-    Agent/XPass set min_credit_size_ 84
-    Agent/XPass set max_credit_size_ 84
-    Agent/XPass set min_ethernet_size_ 84
-    Agent/XPass set max_ethernet_size_ 1538
-    Agent/XPass set max_credit_rate_ $creditRate
-    Agent/XPass set base_credit_rate_ $baseCreditRate
-    Agent/XPass set target_loss_scaling_ 0.125
-    Agent/XPass set alpha 1.0
-    Agent/XPass set w_init 0.0625
-    Agent/XPass set min_w_ 0.01
-    Agent/XPass set retransmit_timeout_ 0.0001
-    Agent/XPass set min_jitter_ -0.1
-    Agent/XPass set max_jitter_ 0.1
-    Agent/XPass set exp_id_ $expID
-# } elseif {([string compare $ccc_type "gdx"] == 0) || ([string compare $ccc_type "mqgdx"] == 0)} {
-    Agent/TCP/FullTcp/XPass set w_init_ $w_init
-    Agent/TCP/FullTcp/XPass set exp_id_ $expID
-    Agent/TCP/FullTcp/XPass set target_loss_scaling_ 0.125
-    Agent/TCP/FullTcp/XPass set base_credit_rate_ $baseCreditRate
-    Agent/TCP/FullTcp/XPass set max_credit_rate_ $creditRate
-    Agent/TCP/FullTcp/XPass set alpha_ $ALPHA
-    Agent/TCP/FullTcp/XPass set min_credit_size_ 78
-    Agent/TCP/FullTcp/XPass set max_credit_size_ 90
-    Agent/TCP/FullTcp/XPass set min_ethernet_size_ 78
-    Agent/TCP/FullTcp/XPass set max_ethernet_size_ 1538
-    Agent/TCP/FullTcp/XPass set w_init_ 0.0625
-    Agent/TCP/FullTcp/XPass set min_w_ 0.01
-    Agent/TCP/FullTcp/XPass set retransmit_timeout_ 0.001
-    Agent/TCP/FullTcp/XPass set default_credit_stop_timeout_ 0.001
-    Agent/TCP/FullTcp/XPass set min_jitter_ -0.1
-    Agent/TCP/FullTcp/XPass set max_jitter_ 0.1
-    Agent/TCP/FullTcp/XPass set xpass_hdr_size_ 78
-    # if {[string compare $ccc_type "mqgdx"] == 0} {
-        
-    # }
-# } elseif {([string compare $ccc_type "egdx"] == 0) || ([string compare $ccc_type "negdx"] == 0)} {
-    Agent/TCP/FullTcp/Egdx set min_credit_size_ 84
-    Agent/TCP/FullTcp/Egdx set max_credit_size_ 84
-    Agent/TCP/FullTcp/Egdx set min_ethernet_size_ 84
-    Agent/TCP/FullTcp/Egdx set max_ethernet_size_ 1538
-    Agent/TCP/FullTcp/Egdx set max_credit_rate_ $creditRate
-    Agent/TCP/FullTcp/Egdx set base_credit_rate_ $baseCreditRate
-    Agent/TCP/FullTcp/Egdx set target_loss_scaling_ 0.125
-    Agent/TCP/FullTcp/Egdx set alpha 1.0
-    Agent/TCP/FullTcp/Egdx set w_init 0.0625
-    Agent/TCP/FullTcp/Egdx set min_w_ 0.01
-    Agent/TCP/FullTcp/Egdx set retransmit_timeout_ 0.0001
-    Agent/TCP/FullTcp/Egdx set min_jitter_ -0.1
-    Agent/TCP/FullTcp/Egdx set max_jitter_ 0.1
-    Agent/TCP/FullTcp/Egdx set exp_id_ $expID
-    Agent/TCP/FullTcp/Egdx set egdx_beta_ $actual_xpass_queue_weight
-    Agent/TCP/FullTcp/Egdx set rc3_mode_ 1
-    Agent/TCP/FullTcp/Egdx set windowInit_ 5; #initial window
-    Agent/TCP/FullTcp/Egdx set new_allocation_logic_ $newEgdxAllocationLogic;
-    Agent/TCP/FullTcp/Egdx set reordering_measure_in_rc3_ $reordering_measure_in_rc3_;
-    Agent/TCP/FullTcp/Egdx set static_allocation_ $static_allocation_;
-# }
+Agent/XPass set min_credit_size_ 84
+Agent/XPass set max_credit_size_ 84
+Agent/XPass set min_ethernet_size_ 84
+Agent/XPass set max_ethernet_size_ 1538
+Agent/XPass set max_credit_rate_ $creditRate
+Agent/XPass set base_credit_rate_ $baseCreditRate
+Agent/XPass set target_loss_scaling_ 0.125
+Agent/XPass set alpha 1.0
+Agent/XPass set w_init 0.0625
+Agent/XPass set min_w_ 0.01
+Agent/XPass set retransmit_timeout_ 0.0001
+Agent/XPass set min_jitter_ -0.1
+Agent/XPass set max_jitter_ 0.1
+Agent/XPass set exp_id_ $expID
+
+Agent/TCP/FullTcp/XPass set w_init_ $w_init
+Agent/TCP/FullTcp/XPass set exp_id_ $expID
+Agent/TCP/FullTcp/XPass set target_loss_scaling_ 0.125
+Agent/TCP/FullTcp/XPass set base_credit_rate_ $baseCreditRate
+Agent/TCP/FullTcp/XPass set max_credit_rate_ $creditRate
+Agent/TCP/FullTcp/XPass set alpha_ $ALPHA
+Agent/TCP/FullTcp/XPass set min_credit_size_ 78
+Agent/TCP/FullTcp/XPass set max_credit_size_ 90
+Agent/TCP/FullTcp/XPass set min_ethernet_size_ 78
+Agent/TCP/FullTcp/XPass set max_ethernet_size_ 1538
+Agent/TCP/FullTcp/XPass set w_init_ 0.0625
+Agent/TCP/FullTcp/XPass set min_w_ 0.01
+Agent/TCP/FullTcp/XPass set retransmit_timeout_ 0.001
+Agent/TCP/FullTcp/XPass set default_credit_stop_timeout_ 0.001
+Agent/TCP/FullTcp/XPass set min_jitter_ -0.1
+Agent/TCP/FullTcp/XPass set max_jitter_ 0.1
+Agent/TCP/FullTcp/XPass set xpass_hdr_size_ 78
+
+Agent/TCP/FullTcp/FlexPass set min_credit_size_ 84
+Agent/TCP/FullTcp/FlexPass set max_credit_size_ 84
+Agent/TCP/FullTcp/FlexPass set min_ethernet_size_ 84
+Agent/TCP/FullTcp/FlexPass set max_ethernet_size_ 1538
+Agent/TCP/FullTcp/FlexPass set max_credit_rate_ $creditRate
+Agent/TCP/FullTcp/FlexPass set base_credit_rate_ $baseCreditRate
+Agent/TCP/FullTcp/FlexPass set target_loss_scaling_ 0.125
+Agent/TCP/FullTcp/FlexPass set alpha 1.0
+Agent/TCP/FullTcp/FlexPass set w_init 0.0625
+Agent/TCP/FullTcp/FlexPass set min_w_ 0.01
+Agent/TCP/FullTcp/FlexPass set retransmit_timeout_ 0.0001
+Agent/TCP/FullTcp/FlexPass set min_jitter_ -0.1
+Agent/TCP/FullTcp/FlexPass set max_jitter_ 0.1
+Agent/TCP/FullTcp/FlexPass set exp_id_ $expID
+Agent/TCP/FullTcp/FlexPass set flexpass_beta_ $actual_xpass_queue_weight
+Agent/TCP/FullTcp/FlexPass set rc3_mode_ 1
+Agent/TCP/FullTcp/FlexPass set windowInit_ 5; #initial window
+Agent/TCP/FullTcp/FlexPass set new_allocation_logic_ $newFlexPassAllocationLogic;
+Agent/TCP/FullTcp/FlexPass set reordering_measure_in_rc3_ $reordering_measure_in_rc3_;
+Agent/TCP/FullTcp/FlexPass set static_allocation_ $static_allocation_;
 
 DelayLink set avoidReordering_ true
 #{[expr $i * 2] <= $N} {
@@ -442,22 +423,10 @@ for {set idx 0} {$idx < [expr $N * $flowPerHost]} {incr idx} {
         puts "GDX Agent"
         set sender($idx) [new Agent/TCP/FullTcp/XPass]
         set receiver($idx) [new Agent/TCP/FullTcp/XPass]
-    } elseif {[string compare $ccc_type "mqgdx"] == 0} {
-        puts "MQ-GDX Agent"
-        set sender($idx) [new Agent/TCP/FullTcp/XPass]
-        set receiver($idx) [new Agent/TCP/FullTcp/XPass]
-        # $sender($idx) set dctcp_ false;
-        # $receiver($idx) set dctcp_ false;
-        # $sender($idx) set dctcp_alpha_ 1.0;
-        # $receiver($idx) set dctcp_alpha_ 1.0;
-    } elseif {[string compare $ccc_type "egdx"] == 0} {
-        puts "E-GDX Agent"
-        set sender($idx) [new Agent/TCP/FullTcp/Egdx]
-        set receiver($idx) [new Agent/TCP/FullTcp/Egdx]
-    } elseif {[string compare $ccc_type "negdx"] == 0} {
-        puts "E-GDX Agent (New)"
-        set sender($idx) [new Agent/TCP/FullTcp/Egdx]
-        set receiver($idx) [new Agent/TCP/FullTcp/Egdx]
+    } elseif {[string compare $ccc_type "flexpass"] == 0} {
+        puts "FlexPass Agent"
+        set sender($idx) [new Agent/TCP/FullTcp/FlexPass]
+        set receiver($idx) [new Agent/TCP/FullTcp/FlexPass]
     }
     $receiver($idx) attach $vt
     $receiver($idx) trace cur_credit_rate_tr_

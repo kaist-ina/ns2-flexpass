@@ -6,7 +6,7 @@
 #include "dwrr-xpass-red.h"
 #include "flags.h"
 #include "packet.h"
-#include "xpass/egdx.h"
+#include "xpass/flexpass.h"
 #include "xpass/xpass.h"
 
 #define max(arg1,arg2) (arg1>arg2 ? arg1 : arg2)
@@ -127,7 +127,7 @@ DWRR::DWRR(): credit_timer_(this) {
 	bind("selective_dropping_threshold_", &selective_dropping_threshold_);
 	bind("enable_non_xpass_selective_dropping_", &enable_non_xpass_selective_dropping_);
 	bind("enable_tos_", &enable_tos_);
-    bind("egdx_queue_scheme_", &egdx_queue_scheme_);
+    bind("flexpass_queue_scheme_", &flexpass_queue_scheme_);
     bind("enable_shared_buffer_", &enable_shared_buffer_);
     bind("strict_high_priority_", &strict_high_priority_);
     tokens_ = 0;
@@ -361,11 +361,11 @@ static inline bool isPacketUnscheduled (Packet *p) {
 	return false;
 }
 
-inline bool isPacketSelectiveDropTarget(int egdx_queue_scheme_, hdr_cmn *cmnh) {
-	if(egdx_queue_scheme_ == 2) 
-    	return cmnh->tos() == TOS_GDX_REACTIVE;
-	else if (egdx_queue_scheme_ == 4) 
-    	return cmnh->tos() == TOS_GDX_REACTIVE || cmnh->tos() == TOS_DATA_TCP || cmnh->tos() == 0;
+inline bool isPacketSelectiveDropTarget(int flexpass_queue_scheme_, hdr_cmn *cmnh) {
+	if(flexpass_queue_scheme_ == 2) 
+    	return cmnh->tos() == TOS_FLEXPASS_REACTIVE;
+	else if (flexpass_queue_scheme_ == 4) 
+    	return cmnh->tos() == TOS_FLEXPASS_REACTIVE || cmnh->tos() == TOS_DATA_TCP || cmnh->tos() == 0;
   return false;
 }
 
@@ -417,9 +417,9 @@ void DWRR::enque(Packet *p)
 
 	if (cmnh->ptype() == PT_XPASS_CREDIT) {
 		if (queues[0].byteLength() + pktSize  > credit_q_limit_) {
-			hdr_egdx* egdxh = hdr_egdx::access(p);
+			hdr_flexpass* flexpassh = hdr_flexpass::access(p);
 			hdr_xpass* xpassh = hdr_xpass::access(p);
-      		int fid = egdxh->fid_ ? egdxh->fid_ : xpassh->fid_;
+      		int fid = flexpassh->fid_ ? flexpassh->fid_ : xpassh->fid_;
 			if (debug_credit_drop_per_flow_.find(fid) == debug_credit_drop_per_flow_.end())
 				debug_credit_drop_per_flow_[fid] = 0;
             debug_credit_drop_per_flow_[fid] += 1;
@@ -431,32 +431,32 @@ void DWRR::enque(Packet *p)
 		prio = 0;
 	} else {
 		if (enable_tos_) {
-			if (egdx_queue_scheme_ == 1) {
+			if (flexpass_queue_scheme_ == 1) {
 				// Pro / Rea,  Legacy
-				if (cmnh->tos() == TOS_GDX_PROACTIVE) 
+				if (cmnh->tos() == TOS_FLEXPASS_PROACTIVE) 
 					prio = 1;
 				else
 					prio = 2;
-            } else if (egdx_queue_scheme_ == 2) {
+            } else if (flexpass_queue_scheme_ == 2) {
                 // Pro, Rea / Legacy
-                if (cmnh->tos() == TOS_GDX_REACTIVE || cmnh->tos() == TOS_GDX_PROACTIVE)
+                if (cmnh->tos() == TOS_FLEXPASS_REACTIVE || cmnh->tos() == TOS_FLEXPASS_PROACTIVE)
                     prio = 1;
                 else
                     prio = 2;
-            } else if (egdx_queue_scheme_ == 3) {
+            } else if (flexpass_queue_scheme_ == 3) {
                 // Pro / Rea / Legacy
                 assert(queue_num_ >= 3);
-                if (cmnh->tos() == TOS_GDX_PROACTIVE)
+                if (cmnh->tos() == TOS_FLEXPASS_PROACTIVE)
                     prio = 2;
-                else if (cmnh->tos() == TOS_GDX_REACTIVE)
+                else if (cmnh->tos() == TOS_FLEXPASS_REACTIVE)
                     prio = 1;
                 else
                     prio = 3;
-            } else if (egdx_queue_scheme_ == 4) {
+            } else if (flexpass_queue_scheme_ == 4) {
                 // Pro, Rea, Legacy
                 prio = 2;
             } else {
-                fprintf(stderr, "Unexpected egdx_queue_scheme_ %d\n", egdx_queue_scheme_);
+                fprintf(stderr, "Unexpected flexpass_queue_scheme_ %d\n", flexpass_queue_scheme_);
 				abort();
 			}
 			// for comparison purpose
@@ -506,7 +506,7 @@ void DWRR::enque(Packet *p)
 		} else {
 			unscheduled_queue_len_ += pktSize;
 		}
-	} else if (enable_non_xpass_selective_dropping_ && isPacketSelectiveDropTarget(egdx_queue_scheme_, cmnh)) {
+	} else if (enable_non_xpass_selective_dropping_ && isPacketSelectiveDropTarget(flexpass_queue_scheme_, cmnh)) {
         unimportant = true;
         if (enable_shared_buffer_ && broadcom_node_ingress_) {
             if (!(broadcom_node_ingress_->CheckIngressTLT(broadcom_node_ingress_port_, prio, pktSize) && broadcom_node_ingress_->CheckEgressTLT(dest_device, prio, pktSize))) {
@@ -780,7 +780,7 @@ Packet *DWRR::deque(void)
 			unscheduled_queue_len_ -= cmnh->size();
 		}
         bool unimportant = false;
-        if (isPacketSelectiveDropTarget(egdx_queue_scheme_, cmnh)) {
+        if (isPacketSelectiveDropTarget(flexpass_queue_scheme_, cmnh)) {
             unimportant = true;
             if (!enable_shared_buffer_  || !broadcom_node_ingress_) {
                 assert(selective_packet_queue_len_ >= cmnh->size());

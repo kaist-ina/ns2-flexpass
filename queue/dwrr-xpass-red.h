@@ -119,7 +119,7 @@ class DWRR : public Queue
 		int enable_tos_;
 		int enable_non_xpass_selective_dropping_{0};
 		int selective_packet_queue_len_{0};
-		int egdx_queue_scheme_;
+		int flexpass_queue_scheme_;
 		int credit_drop_count_;
     	BroadcomNode *broadcom_node_ingress_;
     	BroadcomNode *broadcom_node_egress_;

@@ -1730,60 +1730,60 @@ Queue/DwrrXPassRED set qidx_ 0
 Queue/DwrrXPassRED set enable_tos_ 1
 Queue/DwrrXPassRED set enable_shared_buffer_ 1
 Queue/DwrrXPassRED set enable_non_xpass_selective_dropping_ 0
-Queue/DwrrXPassRED set egdx_queue_scheme_ 2
+Queue/DwrrXPassRED set flexpass_queue_scheme_ 2
 Queue/DwrrXPassRED set strict_high_priority_ 0
 
-Agent/TCP/FullTcp/Egdx set sack_block_size_ 8; # bytes in a SACK block
-Agent/TCP/FullTcp/Egdx set sack_option_size_ 2; # bytes in opt hdr
-Agent/TCP/FullTcp/Egdx set max_sack_blocks_ 3; # max # of sack blks
-Agent/TCP/FullTcp/Egdx set clear_on_timeout_ true; # clear sq at sender on timeout?
-Agent/TCP/FullTcp/Egdx set sack_rtx_cthresh_ 1; # dup cnt to trigger rtx
-Agent/TCP/FullTcp/Egdx set sack_rtx_bthresh_ 1; # dup bcnt to trigger rtx
-Agent/TCP/FullTcp/Egdx set sack_rtx_threshmode_ 1; # 1 = cnt only
+Agent/TCP/FullTcp/FlexPass set sack_block_size_ 8; # bytes in a SACK block
+Agent/TCP/FullTcp/FlexPass set sack_option_size_ 2; # bytes in opt hdr
+Agent/TCP/FullTcp/FlexPass set max_sack_blocks_ 3; # max # of sack blks
+Agent/TCP/FullTcp/FlexPass set clear_on_timeout_ true; # clear sq at sender on timeout?
+Agent/TCP/FullTcp/FlexPass set sack_rtx_cthresh_ 1; # dup cnt to trigger rtx
+Agent/TCP/FullTcp/FlexPass set sack_rtx_bthresh_ 1; # dup bcnt to trigger rtx
+Agent/TCP/FullTcp/FlexPass set sack_rtx_threshmode_ 1; # 1 = cnt only
 
-Agent/TCP/FullTcp/Egdx instproc init {} {
+Agent/TCP/FullTcp/FlexPass instproc init {} {
 	$self next
 	$self instvar reno_fastrecov_ open_cwnd_on_pack_
 	set reno_fastrecov_ false
 	set open_cwnd_on_pack_ false
 }
 
-Agent/TCP/FullTcp/Egdx set min_credit_size_ 84
-Agent/TCP/FullTcp/Egdx set max_credit_size_ 84
-Agent/TCP/FullTcp/Egdx set min_ethernet_size_ 84
-Agent/TCP/FullTcp/Egdx set max_ethernet_size_ 1538
-Agent/TCP/FullTcp/Egdx set xpass_hdr_size_ 78
-Agent/TCP/FullTcp/Egdx set max_credit_rate_ 64734895 ;# for 10Gbps
-Agent/TCP/FullTcp/Egdx set base_credit_rate_ 64734895 ;# for 10Gbps
-Agent/TCP/FullTcp/Egdx set alpha_ 0.5
-Agent/TCP/FullTcp/Egdx set target_loss_scaling_ 0.125
-Agent/TCP/FullTcp/Egdx set w_init_ 0.5
-Agent/TCP/FullTcp/Egdx set min_w_ 0.01
-Agent/TCP/FullTcp/Egdx set retransmit_timeout_ 0.1 ;# 100ms
-Agent/TCP/FullTcp/Egdx set default_credit_stop_timeout_ 0.002 ;# 2ms
-Agent/TCP/FullTcp/Egdx set min_jitter_ -0.1
-Agent/TCP/FullTcp/Egdx set max_jitter_ 0.1
+Agent/TCP/FullTcp/FlexPass set min_credit_size_ 84
+Agent/TCP/FullTcp/FlexPass set max_credit_size_ 84
+Agent/TCP/FullTcp/FlexPass set min_ethernet_size_ 84
+Agent/TCP/FullTcp/FlexPass set max_ethernet_size_ 1538
+Agent/TCP/FullTcp/FlexPass set xpass_hdr_size_ 78
+Agent/TCP/FullTcp/FlexPass set max_credit_rate_ 64734895 ;# for 10Gbps
+Agent/TCP/FullTcp/FlexPass set base_credit_rate_ 64734895 ;# for 10Gbps
+Agent/TCP/FullTcp/FlexPass set alpha_ 0.5
+Agent/TCP/FullTcp/FlexPass set target_loss_scaling_ 0.125
+Agent/TCP/FullTcp/FlexPass set w_init_ 0.5
+Agent/TCP/FullTcp/FlexPass set min_w_ 0.01
+Agent/TCP/FullTcp/FlexPass set retransmit_timeout_ 0.1 ;# 100ms
+Agent/TCP/FullTcp/FlexPass set default_credit_stop_timeout_ 0.002 ;# 2ms
+Agent/TCP/FullTcp/FlexPass set min_jitter_ -0.1
+Agent/TCP/FullTcp/FlexPass set max_jitter_ 0.1
 
-Agent/TCP/FullTcp/Egdx set exp_id_ 0
-Agent/TCP/FullTcp/Egdx set bic_s_min_ 100000
-Agent/TCP/FullTcp/Egdx set bic_s_max_ 6000000
-Agent/TCP/FullTcp/Egdx set bic_beta_ 2
-Agent/TCP/FullTcp/Egdx set cur_credit_rate_tr_ 0
-Agent/TCP/FullTcp/Egdx set max_link_rate_ 1000000000;#10Gbps
-Agent/TCP/FullTcp/Egdx set base_rtt_ 0.00004; #40us
-Agent/TCP/FullTcp/Egdx set unscheduled_burst_period_ 500000; #500kB
-Agent/TCP/FullTcp/Egdx set aeolus_firstrtt_burst_ 0
+Agent/TCP/FullTcp/FlexPass set exp_id_ 0
+Agent/TCP/FullTcp/FlexPass set bic_s_min_ 100000
+Agent/TCP/FullTcp/FlexPass set bic_s_max_ 6000000
+Agent/TCP/FullTcp/FlexPass set bic_beta_ 2
+Agent/TCP/FullTcp/FlexPass set cur_credit_rate_tr_ 0
+Agent/TCP/FullTcp/FlexPass set max_link_rate_ 1000000000;#10Gbps
+Agent/TCP/FullTcp/FlexPass set base_rtt_ 0.00004; #40us
+Agent/TCP/FullTcp/FlexPass set unscheduled_burst_period_ 500000; #500kB
+Agent/TCP/FullTcp/FlexPass set aeolus_firstrtt_burst_ 0
 
-Agent/TCP/FullTcp/Egdx set egdx_beta_ 0.5; # is a weight of xpass queue
-Agent/TCP/FullTcp/Egdx set egdx_beta_min_ 0.5
-Agent/TCP/FullTcp/Egdx set enable_ack_ 1
-Agent/TCP/FullTcp/Egdx set egdx_xpass_prioritized_bytes_ 1
-Agent/TCP/FullTcp/Egdx set debug_flowsize_ -1
-Agent/TCP/FullTcp/Egdx set rc3_mode_ 1; # enable RC3 mode
-Agent/TCP/FullTcp/Egdx set tcprexmtthresh_ 1;
-Agent/TCP/FullTcp/Egdx set new_allocation_logic_ 1;
-Agent/TCP/FullTcp/Egdx set reordering_measure_in_rc3_ 0;
-Agent/TCP/FullTcp/Egdx set static_allocation_ 0;
+Agent/TCP/FullTcp/FlexPass set flexpass_beta_ 0.5; # is a weight of xpass queue
+Agent/TCP/FullTcp/FlexPass set flexpass_beta_min_ 0.5
+Agent/TCP/FullTcp/FlexPass set enable_ack_ 1
+Agent/TCP/FullTcp/FlexPass set flexpass_xpass_prioritized_bytes_ 1
+Agent/TCP/FullTcp/FlexPass set debug_flowsize_ -1
+Agent/TCP/FullTcp/FlexPass set rc3_mode_ 1; # enable RC3 mode
+Agent/TCP/FullTcp/FlexPass set tcprexmtthresh_ 1;
+Agent/TCP/FullTcp/FlexPass set new_allocation_logic_ 1;
+Agent/TCP/FullTcp/FlexPass set reordering_measure_in_rc3_ 0;
+Agent/TCP/FullTcp/FlexPass set static_allocation_ 0;
 
 Agent/TCP/FullTcp set debug_flowsize_ -1
 
@@ -1792,136 +1792,136 @@ Queue/BroadcomNode set port_count_ 12; # different from ns-3 implementation!
 Queue/BroadcomNode set selective_dropping_threshold_ 100000;
 
 ### from TCP and TCP SACK ####
-# Agent/EGDX set segsperack_ 1; # ACK frequency
-# Agent/EGDX set spa_thresh_ 0; # below do 1 seg per ack [0:disable]
-# Agent/EGDX set segsize_ 536; # segment size
-# Agent/EGDX set tcprexmtthresh_ 3; # num dupacks to enter recov
-# Agent/EGDX set iss_ 0; # Initial send seq#
-# Agent/EGDX set nodelay_ false; # Nagle disable?
-# Agent/EGDX set data_on_syn_ false; # allow data on 1st SYN?
-# Agent/EGDX set dupseg_fix_ true ; # no rexmt w/dup segs from peer
-# Agent/EGDX set dupack_reset_ false; # exit recov on ack < highest
-# Agent/EGDX set interval_ 0.1 ; # delayed ACK interval 100ms 
-# Agent/EGDX set close_on_empty_ false; # close conn if sent all
-# Agent/EGDX set signal_on_empty_ false; # signal if sent all
-# Agent/EGDX set ts_option_size_ 10; # in bytes
-# Agent/EGDX set reno_fastrecov_ true; # fast recov true by default
-# Agent/EGDX set pipectrl_ false; # use "pipe" ctrl
-# Agent/EGDX set open_cwnd_on_pack_ true; # ^ win on partial acks?
-# Agent/EGDX set halfclose_ false; # do simplex closes (shutdown)?
-# Agent/EGDX set nopredict_ false; # disable header prediction code?
-# Agent/EGDX set ecn_syn_ false; # Make SYN/ACK packet ECN-Capable?
-# Agent/EGDX set ecn_syn_wait_ 0; # Wait after marked SYN/ACK? 
-# Agent/EGDX set debug_ false;  # Added Sept. 16, 2007.
-# Agent/EGDX set sack_block_size_ 8; # bytes in a SACK block
-# Agent/EGDX set sack_option_size_ 2; # bytes in opt hdr
-# Agent/EGDX set max_sack_blocks_ 3; # max # of sack blks
-# Agent/EGDX set clear_on_timeout_ true; # clear sq at sender on timeout?
-# Agent/EGDX set sack_rtx_cthresh_ 1; # dup cnt to trigger rtx
-# Agent/EGDX set sack_rtx_bthresh_ 1; # dup bcnt to trigger rtx
-# Agent/EGDX set sack_rtx_threshmode_ 1; # 1 = cnt only
-# Agent/EGDX set seqno_ 0
-# Agent/EGDX set t_seqno_ 0
-# Agent/EGDX set maxburst_ 0
-# Agent/EGDX set aggressive_maxburst_ 1 ;  # Added 2003/6/2.
-# Agent/EGDX set maxcwnd_ 0
-# Agent/EGDX set numdupacks_ 3
-# Agent/EGDX set numdupacksFrac_ -1 ;	# Added 2002/10/18.
-# Agent/EGDX set exitFastRetrans_ true ;	# Added 2003/7/28.
-# Agent/EGDX set window_ 20
-# Agent/EGDX set windowInit_ 2 ;		# default changed on 2001/5/26.
-# Agent/EGDX set windowInitOption_ 1
-# Agent/EGDX set syn_ true ;		# default changed on 2001/5/17.
-# Agent/EGDX set max_connects_ -1 ;	# Variable added on 2007/9/25.
-# Agent/EGDX set windowOption_ 1
-# Agent/EGDX set windowConstant_ 4
-# Agent/EGDX set windowThresh_ 0.002
-# Agent/EGDX set decrease_num_ 0.5
-# Agent/EGDX set increase_num_ 1.0
-# Agent/EGDX set k_parameter_ 0.0 ;	# for binomial congestion control
-# Agent/EGDX set l_parameter_ 1.0 ;  	# for binomial congestion control
-# Agent/EGDX set overhead_ 0
-# Agent/EGDX set ecn_ 0
-# Agent/EGDX set old_ecn_ 0
-# Agent/EGDX set bugfix_ss_ 1 ;		# Variable added on 2006/06/13
-# Agent/EGDX set packetSize_ 1000
-# Agent/EGDX set tcpip_base_hdr_size_ 40
-# Agent/EGDX set ts_option_size_ 10; 	# in bytes
-# Agent/EGDX set bugFix_ true
-# Agent/EGDX set bugFix_ack_ false ;       # Variable added on 2003/08/13
-# Agent/EGDX set bugFix_ts_ false ;	# Variable added on 2003/08/13
-# Agent/EGDX set lessCareful_ false ;	# for the Less Careful variant of
-# Agent/EGDX set timestamps_ false
-# Agent/EGDX set ts_resetRTO_ false ;	# Added 2003/07/24.
-# Agent/EGDX set slow_start_restart_ true
-# Agent/EGDX set restart_bugfix_ true
-# Agent/EGDX set tcpTick_ 0.01 ;		# default changed on 2002/03/07
-# Agent/EGDX set maxrto_ 60 ; 		# default changed on 2007/03/28
-# Agent/EGDX set minrto_ 0.2 ;		# Default changed to 200ms on 
-# Agent/EGDX set srtt_init_ 0
-# Agent/EGDX set rttvar_init_ 12
-# Agent/EGDX set rtxcur_init_ 3.0 ;	# Default changed on 2006/01/21		
-# Agent/EGDX set T_SRTT_BITS 3
-# Agent/EGDX set T_RTTVAR_BITS 2
-# Agent/EGDX set rttvar_exp_ 2
-# Agent/EGDX set updated_rttvar_ true ;	# Variable added on 2006/1/21
-# Agent/EGDX set timerfix_ true ; 		# Variable added on 2001/05/11
-# Agent/EGDX set rfc2988_ true ;		# Default set to "true" on 2002/03/07.
-# Agent/EGDX instproc done {} { }
-# Agent/EGDX set noFastRetrans_ false
-# Agent/EGDX set partial_ack_ false ;	# Variable added on 2002/12/28.
-# Agent/EGDX set dupacks_ 0
-# Agent/EGDX set ack_ 0
-# Agent/EGDX set cwnd_ 0
-# Agent/EGDX set awnd_ 0
-# Agent/EGDX set ssthresh_ 0
-# Agent/EGDX set rtt_ 0
-# Agent/EGDX set srtt_ 0
-# Agent/EGDX set rttvar_ 0
-# Agent/EGDX set backoff_ 0
-# Agent/EGDX set maxseq_ 0
-# Agent/EGDX set singledup_ 1 ;		# default changed on 2001/11/28.
-# Agent/EGDX set LimTransmitFix_ false ;	# added on 2003/03/31.
-# Agent/EGDX set precisionReduce_ true ;	# default changed on 2006/1/24.
-# Agent/EGDX set oldCode_ false
-# Agent/EGDX set useHeaders_ true ;	# default changed on 2001/11/28. 
-# Agent/EGDX set low_window_ 38 ;		# default changed on 2002/8/12.		
-# Agent/EGDX set high_window_ 83000
-# Agent/EGDX set high_p_ 0.0000001
-# Agent/EGDX set high_decrease_ 0.1
-# Agent/EGDX set max_ssthresh_ 0
-# Agent/EGDX set cwnd_range_ 0 ;		# cwnd_frac_ deleted on 6/6/04,
-# Agent/EGDX set rate_request_ 0
-# Agent/EGDX set qs_enabled_ false
-# Agent/EGDX set tcp_qs_recovery_ true ;	# Added on 2004/09/21, by Pasi.
-# Agent/EGDX set qs_request_mode_ 1
-# Agent/EGDX set qs_rtt_ 50
-# Agent/EGDX set print_request_ false
-# Agent/EGDX set qs_thresh_ 4
-# Agent/EGDX set ndatapack_ 0
-# Agent/EGDX set ndatabytes_ 0
-# Agent/EGDX set nackpack_ 0
-# Agent/EGDX set nrexmit_ 0
-# Agent/EGDX set nrexmitpack_ 0
-# Agent/EGDX set nrexmitbytes_ 0
-# Agent/EGDX set necnresponses_ 0
-# Agent/EGDX set ncwndcuts_ 0 
-# Agent/EGDX set ncwndcuts1_ 0
-# Agent/EGDX set trace_all_oneline_ false
-# Agent/EGDX set QOption_ 0 
-# Agent/EGDX set EnblRTTCtr_ 0
-# Agent/EGDX set control_increase_ 0
-# Agent/EGDX set SetCWRonRetransmit_ true ; # added on 2005/06/19.
-# Agent/EGDX set dctcp_ true;
-# Agent/EGDX set dctcp_alpha_ 0.0;
-# Agent/EGDX set dctcp_g_ 0.0625;
-# Agent/EGDX set nam_tracevar_ false
-# Agent/EGDX set eln_ 0
-# Agent/EGDX set eln_rxmit_thresh_ 1
-# Agent/EGDX set delay_growth_ false
-# Agent/EGDX set delay_growth_ true ;	# default changed on 2001/5/17.
-# Agent/EGDX set CoarseTimer_      0
-# Agent/EGDX set frto_enabled_	0 ;	# Added on 2004/10/26 for F-RTO
-# Agent/EGDX set sfrto_enabled_	0 ;	# Added on 2004/10/26 for F-RTO
-# Agent/EGDX set spurious_response_ 1 ;	# Added on 2004/10/26 for F-RTO
+# Agent/FLEXPASS set segsperack_ 1; # ACK frequency
+# Agent/FLEXPASS set spa_thresh_ 0; # below do 1 seg per ack [0:disable]
+# Agent/FLEXPASS set segsize_ 536; # segment size
+# Agent/FLEXPASS set tcprexmtthresh_ 3; # num dupacks to enter recov
+# Agent/FLEXPASS set iss_ 0; # Initial send seq#
+# Agent/FLEXPASS set nodelay_ false; # Nagle disable?
+# Agent/FLEXPASS set data_on_syn_ false; # allow data on 1st SYN?
+# Agent/FLEXPASS set dupseg_fix_ true ; # no rexmt w/dup segs from peer
+# Agent/FLEXPASS set dupack_reset_ false; # exit recov on ack < highest
+# Agent/FLEXPASS set interval_ 0.1 ; # delayed ACK interval 100ms 
+# Agent/FLEXPASS set close_on_empty_ false; # close conn if sent all
+# Agent/FLEXPASS set signal_on_empty_ false; # signal if sent all
+# Agent/FLEXPASS set ts_option_size_ 10; # in bytes
+# Agent/FLEXPASS set reno_fastrecov_ true; # fast recov true by default
+# Agent/FLEXPASS set pipectrl_ false; # use "pipe" ctrl
+# Agent/FLEXPASS set open_cwnd_on_pack_ true; # ^ win on partial acks?
+# Agent/FLEXPASS set halfclose_ false; # do simplex closes (shutdown)?
+# Agent/FLEXPASS set nopredict_ false; # disable header prediction code?
+# Agent/FLEXPASS set ecn_syn_ false; # Make SYN/ACK packet ECN-Capable?
+# Agent/FLEXPASS set ecn_syn_wait_ 0; # Wait after marked SYN/ACK? 
+# Agent/FLEXPASS set debug_ false;  # Added Sept. 16, 2007.
+# Agent/FLEXPASS set sack_block_size_ 8; # bytes in a SACK block
+# Agent/FLEXPASS set sack_option_size_ 2; # bytes in opt hdr
+# Agent/FLEXPASS set max_sack_blocks_ 3; # max # of sack blks
+# Agent/FLEXPASS set clear_on_timeout_ true; # clear sq at sender on timeout?
+# Agent/FLEXPASS set sack_rtx_cthresh_ 1; # dup cnt to trigger rtx
+# Agent/FLEXPASS set sack_rtx_bthresh_ 1; # dup bcnt to trigger rtx
+# Agent/FLEXPASS set sack_rtx_threshmode_ 1; # 1 = cnt only
+# Agent/FLEXPASS set seqno_ 0
+# Agent/FLEXPASS set t_seqno_ 0
+# Agent/FLEXPASS set maxburst_ 0
+# Agent/FLEXPASS set aggressive_maxburst_ 1 ;  # Added 2003/6/2.
+# Agent/FLEXPASS set maxcwnd_ 0
+# Agent/FLEXPASS set numdupacks_ 3
+# Agent/FLEXPASS set numdupacksFrac_ -1 ;	# Added 2002/10/18.
+# Agent/FLEXPASS set exitFastRetrans_ true ;	# Added 2003/7/28.
+# Agent/FLEXPASS set window_ 20
+# Agent/FLEXPASS set windowInit_ 2 ;		# default changed on 2001/5/26.
+# Agent/FLEXPASS set windowInitOption_ 1
+# Agent/FLEXPASS set syn_ true ;		# default changed on 2001/5/17.
+# Agent/FLEXPASS set max_connects_ -1 ;	# Variable added on 2007/9/25.
+# Agent/FLEXPASS set windowOption_ 1
+# Agent/FLEXPASS set windowConstant_ 4
+# Agent/FLEXPASS set windowThresh_ 0.002
+# Agent/FLEXPASS set decrease_num_ 0.5
+# Agent/FLEXPASS set increase_num_ 1.0
+# Agent/FLEXPASS set k_parameter_ 0.0 ;	# for binomial congestion control
+# Agent/FLEXPASS set l_parameter_ 1.0 ;  	# for binomial congestion control
+# Agent/FLEXPASS set overhead_ 0
+# Agent/FLEXPASS set ecn_ 0
+# Agent/FLEXPASS set old_ecn_ 0
+# Agent/FLEXPASS set bugfix_ss_ 1 ;		# Variable added on 2006/06/13
+# Agent/FLEXPASS set packetSize_ 1000
+# Agent/FLEXPASS set tcpip_base_hdr_size_ 40
+# Agent/FLEXPASS set ts_option_size_ 10; 	# in bytes
+# Agent/FLEXPASS set bugFix_ true
+# Agent/FLEXPASS set bugFix_ack_ false ;       # Variable added on 2003/08/13
+# Agent/FLEXPASS set bugFix_ts_ false ;	# Variable added on 2003/08/13
+# Agent/FLEXPASS set lessCareful_ false ;	# for the Less Careful variant of
+# Agent/FLEXPASS set timestamps_ false
+# Agent/FLEXPASS set ts_resetRTO_ false ;	# Added 2003/07/24.
+# Agent/FLEXPASS set slow_start_restart_ true
+# Agent/FLEXPASS set restart_bugfix_ true
+# Agent/FLEXPASS set tcpTick_ 0.01 ;		# default changed on 2002/03/07
+# Agent/FLEXPASS set maxrto_ 60 ; 		# default changed on 2007/03/28
+# Agent/FLEXPASS set minrto_ 0.2 ;		# Default changed to 200ms on 
+# Agent/FLEXPASS set srtt_init_ 0
+# Agent/FLEXPASS set rttvar_init_ 12
+# Agent/FLEXPASS set rtxcur_init_ 3.0 ;	# Default changed on 2006/01/21		
+# Agent/FLEXPASS set T_SRTT_BITS 3
+# Agent/FLEXPASS set T_RTTVAR_BITS 2
+# Agent/FLEXPASS set rttvar_exp_ 2
+# Agent/FLEXPASS set updated_rttvar_ true ;	# Variable added on 2006/1/21
+# Agent/FLEXPASS set timerfix_ true ; 		# Variable added on 2001/05/11
+# Agent/FLEXPASS set rfc2988_ true ;		# Default set to "true" on 2002/03/07.
+# Agent/FLEXPASS instproc done {} { }
+# Agent/FLEXPASS set noFastRetrans_ false
+# Agent/FLEXPASS set partial_ack_ false ;	# Variable added on 2002/12/28.
+# Agent/FLEXPASS set dupacks_ 0
+# Agent/FLEXPASS set ack_ 0
+# Agent/FLEXPASS set cwnd_ 0
+# Agent/FLEXPASS set awnd_ 0
+# Agent/FLEXPASS set ssthresh_ 0
+# Agent/FLEXPASS set rtt_ 0
+# Agent/FLEXPASS set srtt_ 0
+# Agent/FLEXPASS set rttvar_ 0
+# Agent/FLEXPASS set backoff_ 0
+# Agent/FLEXPASS set maxseq_ 0
+# Agent/FLEXPASS set singledup_ 1 ;		# default changed on 2001/11/28.
+# Agent/FLEXPASS set LimTransmitFix_ false ;	# added on 2003/03/31.
+# Agent/FLEXPASS set precisionReduce_ true ;	# default changed on 2006/1/24.
+# Agent/FLEXPASS set oldCode_ false
+# Agent/FLEXPASS set useHeaders_ true ;	# default changed on 2001/11/28. 
+# Agent/FLEXPASS set low_window_ 38 ;		# default changed on 2002/8/12.		
+# Agent/FLEXPASS set high_window_ 83000
+# Agent/FLEXPASS set high_p_ 0.0000001
+# Agent/FLEXPASS set high_decrease_ 0.1
+# Agent/FLEXPASS set max_ssthresh_ 0
+# Agent/FLEXPASS set cwnd_range_ 0 ;		# cwnd_frac_ deleted on 6/6/04,
+# Agent/FLEXPASS set rate_request_ 0
+# Agent/FLEXPASS set qs_enabled_ false
+# Agent/FLEXPASS set tcp_qs_recovery_ true ;	# Added on 2004/09/21, by Pasi.
+# Agent/FLEXPASS set qs_request_mode_ 1
+# Agent/FLEXPASS set qs_rtt_ 50
+# Agent/FLEXPASS set print_request_ false
+# Agent/FLEXPASS set qs_thresh_ 4
+# Agent/FLEXPASS set ndatapack_ 0
+# Agent/FLEXPASS set ndatabytes_ 0
+# Agent/FLEXPASS set nackpack_ 0
+# Agent/FLEXPASS set nrexmit_ 0
+# Agent/FLEXPASS set nrexmitpack_ 0
+# Agent/FLEXPASS set nrexmitbytes_ 0
+# Agent/FLEXPASS set necnresponses_ 0
+# Agent/FLEXPASS set ncwndcuts_ 0 
+# Agent/FLEXPASS set ncwndcuts1_ 0
+# Agent/FLEXPASS set trace_all_oneline_ false
+# Agent/FLEXPASS set QOption_ 0 
+# Agent/FLEXPASS set EnblRTTCtr_ 0
+# Agent/FLEXPASS set control_increase_ 0
+# Agent/FLEXPASS set SetCWRonRetransmit_ true ; # added on 2005/06/19.
+# Agent/FLEXPASS set dctcp_ true;
+# Agent/FLEXPASS set dctcp_alpha_ 0.0;
+# Agent/FLEXPASS set dctcp_g_ 0.0625;
+# Agent/FLEXPASS set nam_tracevar_ false
+# Agent/FLEXPASS set eln_ 0
+# Agent/FLEXPASS set eln_rxmit_thresh_ 1
+# Agent/FLEXPASS set delay_growth_ false
+# Agent/FLEXPASS set delay_growth_ true ;	# default changed on 2001/5/17.
+# Agent/FLEXPASS set CoarseTimer_      0
+# Agent/FLEXPASS set frto_enabled_	0 ;	# Added on 2004/10/26 for F-RTO
+# Agent/FLEXPASS set sfrto_enabled_	0 ;	# Added on 2004/10/26 for F-RTO
+# Agent/FLEXPASS set spurious_response_ 1 ;	# Added on 2004/10/26 for F-RTO
 ######

@@ -184,7 +184,7 @@ set protolist {
         IPinIP 	# IP encapsulation 
 	HDLC 	# High Level Data Link Control
   XPass # ExpressPass
-  EGDX # EGDX
+  FLEXPASS # FLEXPASS
 }
 set allhdrs [regsub -all {#.*?\n} $protolist \n]; # strip comments from above
 foreach prot $allhdrs {
